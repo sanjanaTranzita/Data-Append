@@ -1,0 +1,64 @@
+MADHURIMA COLLECTION
+N AND J 
+SKYBEN
+ABHIDEEP
+AMAR FAB
+KOBSOOK
+PEPPLAY
+AHALYAA
+A PLUS BY AHALYAA
+APAAPI
+APAAPI THREADS OF GLORY
+COTSTYLE
+AYKA
+APCO
+BCZ STYLE
+SareeVenue
+Royal Quality Store
+
+
+import requests
+from PIL import Image
+from io import BytesIO
+import webcolors
+
+def get_hexcode_from_image_link(image_link):
+    # Download the image
+    response = requests.get(image_link)
+    
+    if response.status_code == 200:
+        # Open the image using Pillow
+        img = Image.open(BytesIO(response.content))
+        
+        # Get the dominant color
+        dominant_color = get_dominant_color(img)
+        
+        # Convert RGB to hex code
+        hex_code = rgb_to_hex(dominant_color)
+        
+        return hex_code
+    else:
+        print(f"Failed to download image. Status code: {response.status_code}")
+        return None
+
+def get_dominant_color(image):
+    # Resize image to reduce processing time if needed
+    resized_image = image.resize((10, 15))
+    
+    # Get the dominant color using the getpixel method
+    dominant_color = resized_image.getpixel((0, 0))
+    
+    return dominant_color
+
+def rgb_to_hex(rgb_color):
+    hex_code = webcolors.rgb_to_hex(rgb_color)
+    return hex_code
+
+# Example usage
+image_link = "https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/26916480/2024/1/14/531bd07e-ac21-44e8-9513-73cad77da9261705232048984BindigasmsAdviSelf-DesignCottonStretchableReadymadeSareeBlou1.jpg"
+hex_code = get_hexcode_from_image_link(image_link)
+
+if hex_code:
+    print(f"The dominant color hex code is: {hex_code}")
+else:
+    print("Failed to retrieve hex code.")
